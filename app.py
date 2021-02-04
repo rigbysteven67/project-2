@@ -46,7 +46,7 @@ app = Flask(__name__)
 def home():
     return render_template('index.html')
 
-# set up the data route
+# set up the fantasy route
 @app.route('/api/fantasy_stats')
 def fantasy_stats():
 
@@ -68,6 +68,27 @@ def fantasy_stats():
 
     conn.close()
     return fantasy_stats_json 
+
+
+#setup the SB route
+@app.route('/api/super_bowls')
+def super_bowl_table():
+
+    # Establish DB connection
+    conn = engine.connect()
+    
+    query2 = '''
+        SELECT
+	        *
+        FROM
+            super_bowl_table
+        '''
+    
+    superbowl_data = pd.read_sql(query2, con=conn)
+    superbowl_data_json = superbowl_data.to_json(orient='records')
+
+    conn.close()
+    return superbowl_data_json 
 
 if __name__ == "__main__":
     app.run(debug=True)
