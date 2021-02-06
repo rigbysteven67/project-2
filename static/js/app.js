@@ -9,7 +9,7 @@ d3.json('api/fantasy_stats').then(data => {
 	});
 
     data.forEach(stats => {
-           
+     //Gene was here      
 	// populate tbody
         tbody = d3.select('#stats-tbody')
         var tr = tbody.append("tr");
