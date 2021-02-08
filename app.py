@@ -1,77 +1,15 @@
-import os
+# 1. import Flask
+from flask import Flask
 
-# Heroku check
-is_heroku = False
-if 'IS_HEROKU' in os.environ:
-    is_heroku = True
-
-# Flask
-from flask import Flask, request, render_template, jsonify
-
-# SQL Alchemy
-import sqlalchemy
-from sqlalchemy import create_engine
-
-# PyMySQL
-import pymysql
-
-# Pandas
-import pandas as pd
-
-# JSON
-import json
-
-# Import your config file(s) and variable(s)
-if is_heroku == True:
-    # if IS_HEROKU is found in the environment variables, then use the rest
-    # NOTE: you still need to set up the IS_HEROKU environment variable on Heroku (it is not there by default)
-    remote_db_endpoint = os.environ.get('remote_db_endpoint')
-    remote_db_port = os.environ.get('remote_db_port')
-    remote_db_name = os.environ.get('remote_db_name')
-    remote_db_user = os.environ.get('remote_db_user')
-    remote_db_pwd = os.environ.get('remote_db_pwd')
-else:
-    # use the config.py file if IS_HEROKU is not detected
-    from config import remote_db_endpoint, remote_db_port, remote_db_name, remote_db_user, remote_db_pwd
-
-# Configure MySQL connection and connect 
-pymysql.install_as_MySQLdb()
-engine = create_engine(f"mysql://{remote_db_user}:{remote_db_pwd}@{remote_db_endpoint}:{remote_db_port}/{remote_db_name}")
-
-# Initialize Flask application
+# 2. Create an app, being sure to pass __name__
 app = Flask(__name__)
 
-# Set up your default route
-@app.route('/')
+# 3. Define what to do when a user hits the index route
+@app.route("/")
 def home():
-    return render_template('index.html')
+    return  render_template('index.html')
 
-# set up the fantasy route
-@app.route('/api/fantasy_stats')
-def fantasy_stats():
-
-    # Establish DB connection
-    conn = engine.connect()
-    
-    query = '''
-        SELECT
-	        *
-        FROM
-            fantasy_stats
-	    ORDER BY
-	        SEASON DESC,
-	        FPTS DESC
-        '''
-    
-    fantasy_stats_data = pd.read_sql(query, con=conn)
-    fantasy_stats_json = fantasy_stats_data.to_json(orient='records')
-
-    conn.close()
-    return fantasy_stats_json 
-
-
-#setup the SB route
-@app.route('/api/super_bowls')
+app.route('/api/super_bowls')
 def super_bowl_table():
 
     # Establish DB connection
