@@ -21,6 +21,8 @@ import pandas as pd
 # JSON
 import json
 
+#Joseph was here
+
 # Import your config file(s) and variable(s)
 if is_heroku == True:
     # if IS_HEROKU is found in the environment variables, then use the rest
@@ -69,7 +71,6 @@ def fantasy_stats():
     conn.close()
     return fantasy_stats_json 
 
-
 #setup the SB route
 @app.route('/api/super_bowls')
 def super_bowl_table():
@@ -79,9 +80,10 @@ def super_bowl_table():
     
     query2 = '''
         SELECT
-	        *
+	        *,
+            Year - 1 as Season
         FROM
-            super_bowl_table
+	        super_bowl_stats;
         '''
     
     superbowl_data = pd.read_sql(query2, con=conn)
@@ -89,6 +91,96 @@ def super_bowl_table():
 
     conn.close()
     return superbowl_data_json 
+
+
+#setup the SB route
+@app.route('/api/fantasy_stats_summary')
+def fantasy_stats_summary():
+
+    # Establish DB connection
+    conn = engine.connect()
+    
+    query = '''
+        SELECT
+            *
+        FROM
+            fantasy_stats_summary
+    '''
+    
+    fantasy_stats_df = pd.read_sql(query, con=conn)
+    fantasy_stats_json = fantasy_stats_df.to_json(orient='records')
+
+    conn.close()
+    return fantasy_stats_json
+
+#setup the player avgs route
+@app.route('/api/super_bowl_fantasy_player_avgs')
+def super_bowl_fantasy_player_avgs():
+
+    # Establish DB connection
+    conn = engine.connect()
+    
+    query = '''
+        SELECT
+            *
+        FROM
+            super_bowl_fantasy_avg_fpts_comparison
+    '''
+    
+    fantasy_stats_df = pd.read_sql(query, con=conn)
+    fantasy_stats_json = fantasy_stats_df.to_json(orient='records')
+
+    conn.close()
+    return fantasy_stats_json
+
+
+#setup the player avgs route
+@app.route('/api/fantasy_avg_season_performance')
+def fantasy_above_average_players():
+
+    # Establish DB connection
+    conn = engine.connect()
+    
+    query = '''
+        SELECT
+            *
+        FROM
+            fantasy_avg_season_performance
+    '''
+    
+    fantasy_stats_df = pd.read_sql(query, con=conn)
+    fantasy_stats_json = fantasy_stats_df.to_json(orient='records')
+
+    conn.close()
+    return fantasy_stats_json
+
+
+
+
+
+#setup the SB route
+@app.route('/api/combined_table')
+def combined_df():
+
+    # Establish DB connection
+    conn = engine.connect()
+    
+    query = '''
+        SELECT
+	        *
+        FROM
+            fantasy_stats
+        INNER JOIN
+            super_bowl_stats
+        ON
+            super_bowl_stats.Season = fantasy_stats.season
+        '''
+    
+    combined_df = pd.read_sql(query, con=conn)
+    combined_json = combined_df.to_json(orient='records')
+
+    conn.close()
+    return combined_json 
 
 if __name__ == "__main__":
     app.run(debug=True)
