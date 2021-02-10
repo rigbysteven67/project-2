@@ -48,6 +48,8 @@ app = Flask(__name__)
 def home():
     return render_template('index.html')
 
+
+
 # set up the fantasy route
 @app.route('/api/fantasy_stats')
 def fantasy_stats():
@@ -64,6 +66,63 @@ def fantasy_stats():
 	        SEASON DESC,
 	        FPTS DESC
         '''
+    
+    fantasy_stats_data = pd.read_sql(query, con=conn)
+    fantasy_stats_json = fantasy_stats_data.to_json(orient='records')
+
+    conn.close()
+    return fantasy_stats_json 
+
+# set up the avg_points_by_season_position route
+@app.route('/api/avg_points_by_season_position')
+def avg_points_by_season_position():
+
+    # Establish DB connection
+    conn = engine.connect()
+    
+    query = '''
+        SELECT
+            SEASON AS season,
+            POS AS position,
+            AVG(`FPTS/G`) AS avg_fppg
+        FROM 
+            fantasy_stats
+        WHERE 
+            POS IN ('QB', 'RB', 'WR', 'TE')
+        GROUP BY
+            season,
+            position
+
+    '''
+    
+    fantasy_stats_data = pd.read_sql(query, con=conn)
+    fantasy_stats_json = fantasy_stats_data.to_json(orient='records')
+
+    conn.close()
+    return fantasy_stats_json 
+
+# set up the avg_points_by_season_position_team route
+@app.route('/api/avg_points_by_season_position_team')
+def avg_points_by_season_position_team():
+
+    # Establish DB connection
+    conn = engine.connect()
+    
+    query = '''
+        SELECT
+            SEASON AS season,
+            TEAM AS team,
+            POS AS position,
+            AVG(`FPTS/G`) AS avg_fppg
+        FROM 
+            fantasy_stats
+        WHERE 
+            POS IN ('QB', 'RB', 'WR', 'TE')
+        GROUP BY
+            season,
+            team,
+            position
+    '''
     
     fantasy_stats_data = pd.read_sql(query, con=conn)
     fantasy_stats_json = fantasy_stats_data.to_json(orient='records')
@@ -93,7 +152,7 @@ def super_bowl_table():
     return superbowl_data_json 
 
 
-#setup the SB route
+#setup the Fantasy Stats Summary route
 @app.route('/api/fantasy_stats_summary')
 def fantasy_stats_summary():
 
@@ -105,6 +164,8 @@ def fantasy_stats_summary():
             *
         FROM
             fantasy_stats_summary
+        WHERE 
+            POS IN ('QB', 'RB', 'WR', 'TE')
     '''
     
     fantasy_stats_df = pd.read_sql(query, con=conn)
@@ -113,7 +174,7 @@ def fantasy_stats_summary():
     conn.close()
     return fantasy_stats_json
 
-#setup the player avgs route
+#setup the player avg fpts route
 @app.route('/api/super_bowl_fantasy_player_avgs')
 def super_bowl_fantasy_player_avgs():
 
@@ -145,7 +206,7 @@ def fantasy_above_average_players():
         SELECT
             *
         FROM
-            fantasy_avg_season_performance
+            super_bowl_fantasy_avg_fpts_comparison
     '''
     
     fantasy_stats_df = pd.read_sql(query, con=conn)
@@ -153,9 +214,6 @@ def fantasy_above_average_players():
 
     conn.close()
     return fantasy_stats_json
-
-
-
 
 
 #setup the SB route
@@ -180,7 +238,28 @@ def combined_df():
     combined_json = combined_df.to_json(orient='records')
 
     conn.close()
-    return combined_json 
+    return combined_json
+
+
+#setup the SB fpts route
+@app.route('/api/fantasy_positions')
+def fantasy_positions():
+
+    # Establish DB connection
+    conn = engine.connect()
+    
+    query = '''
+        SELECT
+            *
+        FROM
+            refined_pos_table
+    '''
+    
+    fantasy_stats_df = pd.read_sql(query, con=conn)
+    fantasy_stats_json = fantasy_stats_df.to_json(orient='records')
+
+    conn.close()
+    return fantasy_stats_json
 
 if __name__ == "__main__":
     app.run(debug=True)
