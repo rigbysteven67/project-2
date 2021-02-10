@@ -13,22 +13,103 @@
 
         <!-- Custom JavaScript-->
         <script src = "{{ url_for('static', filename='js/app.js') }}" defer></script>
+
+        <!-- Plotly -->
+        <script src="plotly-latest.min.js"></script>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
     </head>
+    
 
     <body>
         <div class='container'>
+
             <div class='row'>
                 <div class='col-md-12'>
                     <h1>Fantasy Stats</h1>
-                    <h4>The '85 Bears</h4>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h5>Avg FPTS/G by Position</h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="avg_fpts_line"></div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h5>Count of Position per Season</h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="pos_count_line"></div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div>
+                    <h5>Count of Position per Seasonn</h5>
+                    <table class='table table-striped table-hover' id='count-table'>
+                        <thead id='count-thead'>
+                        </thead>  
+                        <tbody id='count-tbody'>
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="well">
+                    <h5>Season</h5>
+                    <!-- YOU WILL NEED TO ADD AN onchange EVENT TO THE DROP DOWN! -->
+                    <select id="selDataset" onchange='optionChanged(this.value)' ></select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h5>Scatter Plots, FPTS vs Pos</h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div id="qb_scatter"></div>
+                </div>
+                <div class="col-md-6">
+                    <div id="rb_scatter"></div>
+                </div>
+                <div class="col-md-6">
+                    <div id="wr_scatter"></div>
+                </div>
+                <div class="col-md-6">
+                    <div id="te_scatter"></div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div>
+                    <h5>Leaderboard</h5>
                     <table class='table table-striped table-hover' id='stats-table'>
                         <thead id='stats-thead'>
                         </thead>  
                         <tbody id='stats-tbody'>
                         </tbody>
                     </table>
+                    </div>
                 </div>
             </div>
+                
         </div>
     </body>    
 </html>

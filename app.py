@@ -47,8 +47,8 @@ def home():
     return render_template('index.html')
 
 # set up the fantasy route
-@app.route('/api/fantasy_stats')
-def fantasy_stats():
+@app.route('/api/leaderboard')
+def leaderboard():
 
     # Establish DB connection
     conn = engine.connect()
@@ -57,38 +57,77 @@ def fantasy_stats():
         SELECT
 	        *
         FROM
-            fantasy_stats
-	    ORDER BY
-	        SEASON DESC,
-	        FPTS DESC
+            leaderboard
         '''
     
-    fantasy_stats_data = pd.read_sql(query, con=conn)
-    fantasy_stats_json = fantasy_stats_data.to_json(orient='records')
+    leaderboard_data = pd.read_sql(query, con=conn)
+    leaderboard_json = leaderboard_data.to_json(orient='records')
 
     conn.close()
-    return fantasy_stats_json 
+    return leaderboard_json 
 
-
-#setup the SB route
-@app.route('/api/super_bowls')
-def super_bowl_table():
+# set up the position rank route
+@app.route('/api/pos_rank')
+def pos_rank():
 
     # Establish DB connection
     conn = engine.connect()
     
-    query2 = '''
+    query = '''
         SELECT
 	        *
         FROM
-            super_bowl_table
+            pos_rank
         '''
     
-    superbowl_data = pd.read_sql(query2, con=conn)
-    superbowl_data_json = superbowl_data.to_json(orient='records')
+    pos_rank_data = pd.read_sql(query, con=conn)
+    pos_rank_json = pos_rank_data.to_json(orient='records')
 
     conn.close()
-    return superbowl_data_json 
+    return pos_rank_json 
+
+
+# set up the position fpts over time route
+@app.route('/api/FPTS_over_seasons')
+def FPTS_over_seasons():
+
+    # Establish DB connection
+    conn = engine.connect()
+    
+    query = '''
+        SELECT
+	        *
+        FROM
+            FPTS_over_seasons
+        '''
+    
+    FPTS_over_seasons_data = pd.read_sql(query, con=conn)
+    FPTS_over_seasons_json = FPTS_over_seasons_data.to_json(orient='records')
+
+    conn.close()
+    return FPTS_over_seasons_json 
+
+
+# set up the position fpts over time route
+@app.route('/api/num_of_pos_over_over_seasons')
+def num_of_pos_over_over_seasons():
+
+    # Establish DB connection
+    conn = engine.connect()
+    
+    query = '''
+        select 
+            *
+        from
+            num_of_pos_over_over_seasons
+        '''
+    
+    num_of_pos_over_over_seasons_data = pd.read_sql(query, con=conn)
+    num_of_pos_over_over_seasons_json = num_of_pos_over_over_seasons_data.to_json(orient='records')
+
+    conn.close()
+    return num_of_pos_over_over_seasons_json 
+
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -1,22 +1,355 @@
-d3.json('api/fantasy_stats').then(data => {
+/**********************************/
+// Initialize the visualizatio
 
-	// populate thead
-	thead = d3.select('#stats-thead');
+d3.json('/api/leaderboard').then(data => {
+    // grab a reference to the dropdown select element
+    var selector = d3.select('#selDataset');
 
-	Object.keys(data[0]).forEach(key => {
-	    var th = thead.append('th');
-	    th.text(key);
-	});
+    allYears = data.map(d => d['season']);
 
-    data.forEach(stats => {
-           
-	// populate tbody
-        tbody = d3.select('#stats-tbody')
-        var tr = tbody.append("tr");
-                
-        Object.values(stats).forEach(value => {
-            var td = tr.append("td");
-            td.text(value);
+    years = [...new Set(allYears)];
+
+    years.sort((a,b) => (b-a));
+
+    console.log(years)
+
+    years.forEach(year => {
+        selector
+            .append('option')
+            .property('value', year)
+            .text(year);
+    });
+
+    //use the first sample from the list to build the initial plots
+    var firstSample = years[0];
+
+    buildCharts(firstSample);
+
+
+});
+
+
+
+/**********************************/
+// buildCharts function
+
+function buildCharts(season) {
+
+
+    /**********************************/
+    // build leaderboard table
+
+    d3.json('/api/leaderboard').then(data => {
+        
+        //  apply filter for season value
+        data = data.filter(d => d['season'] == season);
+
+        // populate thead
+        thead = d3.select('#stats-thead');
+
+        Object.keys(data[0]).forEach(key => {
+            var th = thead.append('th');
+            th.text(key);
+        });
+
+        data.forEach(stats => {
+            
+        // populate tbody
+            tbody = d3.select('#stats-tbody')
+            var tr = tbody.append("tr");
+                    
+            Object.values(stats).forEach(value => {
+                var td = tr.append("td");
+                td.text(value);
+            });
         });
     });
-});
+
+    /**********************************/
+    // build scatter plot for qb
+
+    d3.json('/api/pos_rank').then(data => {
+        
+        //  apply filter for season value
+        data = data.filter(d => d['season'] == season);
+        data = data.filter(d => d['pos'] == 'QB').slice(0,10);
+
+        console.log(data)
+
+        var trace1 = {
+            x: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            y: data.map(d => d['Total FPTS']),
+            mode: 'markers',
+            type: 'scatter',
+            name: 'Team A',
+            text: data.map(d => d['name']),
+            marker: { size: 8 }
+          };
+          
+        var data2 = [trace1];
+          
+          var layout = {
+            // xaxis: {
+            //   range: [ 0, 10 ]
+            // },
+            // yaxis: {
+            //   range: [100, 400]
+            // },
+            title:'FPTS for QB Rankings'
+          };
+          
+          Plotly.newPlot('qb_scatter', data2, layout);
+
+    });
+
+     /**********************************/
+    // build scatter plot for rb
+
+    d3.json('/api/pos_rank').then(data => {
+        
+        //  apply filter for season value
+        data = data.filter(d => d['season'] == season);
+        data = data.filter(d => d['pos'] == 'RB').slice(0,10);
+
+        console.log(data)
+
+        var trace1 = {
+            x: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            y: data.map(d => d['Total FPTS']),
+            mode: 'markers',
+            type: 'scatter',
+            name: 'Team A',
+            text: data.map(d => d['name']),
+            marker: { size: 8 }
+          };
+          
+        var data2 = [trace1];
+          
+          var layout = {
+            // xaxis: {
+            //   range: [ 0, 10 ]
+            // },
+            // yaxis: {
+            //   range: [100, 400]
+            // },
+            title:'FPTS for RB Rankings'
+          };
+          
+          Plotly.newPlot('rb_scatter', data2, layout);
+
+    });
+
+     /**********************************/
+    // build scatter plot for wr
+
+    d3.json('/api/pos_rank').then(data => {
+        
+        //  apply filter for season value
+        data = data.filter(d => d['season'] == season);
+        data = data.filter(d => d['pos'] == 'WR').slice(0,10);
+
+        console.log(data)
+
+        var trace1 = {
+            x: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            y: data.map(d => d['Total FPTS']),
+            mode: 'markers',
+            type: 'scatter',
+            name: 'Team A',
+            text: data.map(d => d['name']),
+            marker: { size: 8 }
+          };
+          
+        var data2 = [trace1];
+          
+        var layout = {
+            // xaxis: {
+            //   range: [ 0, 10 ]
+            // },
+            // yaxis: {
+            //   range: [100, 400]
+            // },
+            title:'FPTS for WR Rankings'
+          };
+          
+          Plotly.newPlot('wr_scatter', data2, layout);
+
+    });
+
+     /**********************************/
+    // build scatter plot for TE
+
+    d3.json('/api/pos_rank').then(data => {
+        
+        //  apply filter for season value
+        data = data.filter(d => d['season'] == season);
+        data = data.filter(d => d['pos'] == 'TE').slice(0,10);
+
+        console.log(data)
+
+        var trace1 = {
+            x: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            y: data.map(d => d['Total FPTS']),
+            mode: 'markers',
+            type: 'scatter',
+            name: 'Team A',
+            text: data.map(d => d['name']),
+            marker: { size: 8 }
+          };
+
+        var data2 = [trace1];
+          
+        var layout = {
+            // xaxis: {
+            //   range: [ 0, 10 ]
+            // },
+            // yaxis: {
+            //   range: [100, 400]
+            // },
+            title:'FPTS for TE Rankings'
+          };
+          
+          Plotly.newPlot('te_scatter', data2, layout);
+
+    });
+
+    /**********************************/
+    // build line plot for FPTs / g over seasons
+
+    d3.json('/api/FPTS_over_seasons').then(data => {
+        
+        // //  apply filter for season value
+        // data = data.filter(d => d['season'] == season);
+
+        console.log(data)
+
+
+        var trace1 = {
+            x: data.filter(d => d['pos'] == 'QB').map(d => d['season']),
+            y: data.filter(d => d['pos'] == 'QB').map(d => d['FPTS/G']),
+            mode: 'lines',
+            name: 'QB'
+          };
+          
+          var trace2 = {
+            x: data.filter(d => d['pos'] == 'RB').map(d => d['season']),
+            y: data.filter(d => d['pos'] == 'RB').map(d => d['FPTS/G']),
+            mode: 'lines',
+            name: 'RB'
+          };
+
+          var trace3 = {
+            x: data.filter(d => d['pos'] == 'WR').map(d => d['season']),
+            y: data.filter(d => d['pos'] == 'WR').map(d => d['FPTS/G']),
+            mode: 'lines',
+            name: 'WR'
+          };
+
+          var trace4 = {
+            x: data.filter(d => d['pos'] == 'TE').map(d => d['season']),
+            y: data.filter(d => d['pos'] == 'TE').map(d => d['FPTS/G']),
+            mode: 'lines',
+            name: 'TE'
+          };
+
+          var layout = {
+            title:'Avg Fantasy Points per Game by Position'
+          };
+          
+          var data2 = [trace1, trace2, trace3, trace4];
+        
+          
+        Plotly.newPlot('avg_fpts_line', data2, layout);
+
+    });
+
+
+    /**********************************/
+    // build line plot for # of pos over seasons
+
+    d3.json('/api/num_of_pos_over_over_seasons').then(data => {
+        
+        // //  apply filter for season value
+        // data = data.filter(d => d['season'] == season);
+
+        console.log(data)
+
+
+        var trace1 = {
+            x: data.map(d => d['season']),
+            y: data.map(d => d['QB']),
+            mode: 'lines',
+            name: 'QB'
+          };
+          
+          var trace2 = {
+            x: data.map(d => d['season']),
+            y: data.map(d => d['RB']),
+            mode: 'lines',
+            name: 'RB'
+          };
+
+          var trace3 = {
+            x: data.map(d => d['season']),
+            y: data.map(d => d['WR']),
+            mode: 'lines',
+            name: 'WR'
+          };
+
+          var trace4 = {
+            x: data.map(d => d['season']),
+            y: data.map(d => d['TE']),
+            mode: 'lines',
+            name: 'TE'
+          };
+
+          var layout = {
+            title:'Number of Top 300 Fantasy Players by Position'
+          };
+          
+          var data2 = [trace1, trace2, trace3, trace4];
+        
+          
+        Plotly.newPlot('pos_count_line', data2, layout);
+
+    });
+
+    /**********************************/
+    // build table for # of pos over seasons
+
+
+
+    d3.json('/api/num_of_pos_over_over_seasons').then(data => {
+    
+        //  apply filter for season value
+        //data = data.filter(d => d['season'] == season);
+
+        // populate thead
+        thead = d3.select('#count-thead');
+
+        Object.keys(data[0]).forEach(key => {
+            var th = thead.append('th');
+            th.text(key);
+        });
+
+        data.forEach(stats => {
+            
+        // populate tbody
+            tbody = d3.select('#count-tbody')
+            var tr = tbody.append("tr");
+                    
+            Object.values(stats).forEach(value => {
+                var td = tr.append("td");
+                td.text(value);
+            });
+        });
+    });
+
+    
+
+};
+
+
+function optionChanged(newSample) {
+    buildCharts(newSample);
+};
