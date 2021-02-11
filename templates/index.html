@@ -180,44 +180,53 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-3">
                             <form role="form" class="form-inline">
                                 <div class="form-group">
-                                     
-                                    <label for="exampleInputEmail1">
+                                     <label for="exampleInputEmail1">
                                         Player #1
                                     </label>
                                     <input type="email" class="form-control" id="exampleInputEmail1" />
                                 </div>
-                                <div class="form-group">
-                                     
-                                    <label for="exampleInputPassword1">
+                            </form>
+                        </div>
+                        <div class="col-md-3">
+                            <form role="form" class="form-inline">
+                                <div class="form-group">                                     
+                                    <label for="exampleInputEmail1">
                                         Player #2
                                     </label>
-                                    <input type="password" class="form-control" id="exampleInputPassword1" />
+                                    <input type="email" class="form-control" id="exampleInputEmail1" />
                                 </div>
-                                <div class="form-group">
-                                     
-                                    <label for="exampleInputFile">
-                                        Player input
+                            </form>
+                        </div>
+                        <div class="col-md-2">
+                            <form role="form" class="form-inline">
+                                <div class="form-group">                                     
+                                    <label for="exampleInputEmail1">
+                                        Year
                                     </label>
-                                    <input type="file" class="form-control-file" id="exampleInputFile" />
-                                    <p class="help-block">
-                                        Example block-level help text here.
-                                    </p>
+                                    <input type="email" class="form-control" id="exampleInputEmail1" />
                                 </div>
-                                <div class="checkbox">
-                                     
-                                    <label>
-                                        <input type="checkbox" /> Check me out
-                                    </label>
-                                </div> 
+                            </form>
+                        </div>
+                        <div class="col-md-2">
+                            <form role="form" class="form-inline">
                                 <button type="submit" class="btn btn-primary">
                                     Search
-                                </button>
+                                </button>                                
                             </form>
+                        </div>
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-6">
+                                    <table class="table">
+                                        <thead>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-md-6">
                                     <table class="table">
                                         <thead>
                                         </thead>
@@ -226,6 +235,8 @@
                                     </table>
                                 </div>
                             </div>
+                        </div>
+                    </div>
                         </div>
                     </div>
                     <div class="row">
@@ -243,6 +254,15 @@
                                 <div class="col-md-6">
                                     <div id="pos_count_line"></div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="well">
+                                <h5>Season</h5>
+                                <!---YOU WILL NEED TO ADD AN onchange EVENT TO THE DROP DOWN! --->
+                                <select id="selDataset" onchange='optionChanged(this.value)' ></select>
                             </div>
                         </div>
                     </div>
