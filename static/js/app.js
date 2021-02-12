@@ -38,11 +38,16 @@ function buildCharts(season) {
     // build leaderboard table
 
     d3.json('/api/leaderboard').then(data => {
+      var Tablehead = document.getElementById("stats-thead");
+        Tablehead.innerHTML = "";
+      var Tablebody = document.getElementById("stats-tbody");
+        Tablebody.innerHTML = "";
         
         //  apply filter for season value
-        data = data.filter(d => d['season'] == season);
+        data = data.filter(d => d['season'] == season).slice(0,30);
 
         // populate thead
+        
         thead = d3.select('#stats-thead');
 
         Object.keys(data[0]).forEach(key => {
@@ -395,3 +400,9 @@ function myFunction() {
   }
 }
 
+$(document).ready(function () {
+  $('#myTable').DataTable();
+  $('.dataTables_length').addClass('bs-select');
+  });
+
+$(document).singlePageNav({filter: ':not(.external)'});

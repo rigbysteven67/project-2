@@ -21,6 +21,9 @@ import pandas as pd
 # JSON
 import json
 
+# bootstrap
+#from flask_bootstrap import Bootstrap
+
 # Import your config file(s) and variable(s)
 if is_heroku == True:
     # if IS_HEROKU is found in the environment variables, then use the rest
