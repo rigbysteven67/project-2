@@ -11,8 +11,6 @@ d3.json('/api/leaderboard').then(data => {
 
     years.sort((a,b) => (b-a));
 
-    console.log(years)
-
     years.forEach(year => {
         selector
             .append('option')
@@ -74,8 +72,6 @@ function buildCharts(season) {
         data = data.filter(d => d['season'] == season);
         data = data.filter(d => d['pos'] == 'QB').slice(0,10);
 
-        console.log(data)
-
         var trace1 = {
             x: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             y: data.map(d => d['Total FPTS']),
@@ -97,7 +93,9 @@ function buildCharts(season) {
               title: 'Total Points',
               range: [80, 400]
             },
-            title:'FPTS for QB Rankings'
+            title:'FPTS for QB Rankings',
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)'
           };
           
           Plotly.newPlot('qb_scatter', data2, layout);
@@ -113,8 +111,6 @@ function buildCharts(season) {
         data = data.filter(d => d['season'] == season);
         data = data.filter(d => d['pos'] == 'RB').slice(0,10);
 
-        console.log(data)
-
         var trace1 = {
             x: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             y: data.map(d => d['Total FPTS']),
@@ -136,7 +132,9 @@ function buildCharts(season) {
             title: 'Total Points',
             range: [80, 400]
           },
-          title:'FPTS for RB Rankings'
+          title:'FPTS for RB Rankings',
+          paper_bgcolor: 'rgba(0,0,0,0)',
+          plot_bgcolor: 'rgba(0,0,0,0)'
         };
           
           Plotly.newPlot('rb_scatter', data2, layout);
@@ -151,9 +149,7 @@ function buildCharts(season) {
         //  apply filter for season value
         data = data.filter(d => d['season'] == season);
         data = data.filter(d => d['pos'] == 'WR').slice(0,10);
-
-        console.log(data)
-
+        
         var trace1 = {
             x: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             y: data.map(d => d['Total FPTS']),
@@ -175,7 +171,9 @@ function buildCharts(season) {
             title: 'Total Points',
             range: [80, 400]
           },
-          title:'FPTS for WR Rankings'
+          title:'FPTS for WR Rankings',
+          paper_bgcolor: 'rgba(0,0,0,0)',
+          plot_bgcolor: 'rgba(0,0,0,0)'
         };
           
           Plotly.newPlot('wr_scatter', data2, layout);
@@ -191,8 +189,6 @@ function buildCharts(season) {
         data = data.filter(d => d['season'] == season);
         data = data.filter(d => d['pos'] == 'TE').slice(0,10);
 
-        console.log(data)
-
         var trace1 = {
             x: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             y: data.map(d => d['Total FPTS']),
@@ -214,7 +210,9 @@ function buildCharts(season) {
             title: 'Total Points',
             range: [80, 400]
           },
-          title:'FPTS for TE Rankings'
+          title:'FPTS for TE Rankings',
+          paper_bgcolor: 'rgba(0,0,0,0)',
+          plot_bgcolor: 'rgba(0,0,0,0)'
         };
           
           Plotly.newPlot('te_scatter', data2, layout);
@@ -228,9 +226,6 @@ function buildCharts(season) {
         
         // //  apply filter for season value
         // data = data.filter(d => d['season'] == season);
-
-        console.log(data)
-
 
         var trace1 = {
             x: data.filter(d => d['pos'] == 'QB').map(d => d['season']),
@@ -267,7 +262,9 @@ function buildCharts(season) {
             yaxis: {
               title: 'Avg Points'
             },
-            title:'Avg Fantasy Points per Game by Position'
+            title:'Avg Fantasy Points per Game by Position',
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)'
           };
           
           var data2 = [trace1, trace2, trace3, trace4];
@@ -285,9 +282,6 @@ function buildCharts(season) {
         
         // //  apply filter for season value
         // data = data.filter(d => d['season'] == season);
-
-        console.log(data)
-
 
         var trace1 = {
             x: data.map(d => d['season']),
@@ -324,7 +318,9 @@ function buildCharts(season) {
             yaxis: {
               title: '# of Players'
             },
-            title:'Number of Top 300 Fantasy Players by Position'
+            title:'Number of Top 300 Fantasy Players by Position',
+            paper_bgcolor: 'rgba(0,0,0,0)',
+            plot_bgcolor: 'rgba(0,0,0,0)'
           };
           
           var data2 = [trace1, trace2, trace3, trace4];
@@ -343,6 +339,9 @@ function buildCharts(season) {
     
         //  apply filter for season value
         //data = data.filter(d => d['season'] == season);
+
+        // populate table
+        //table = d3.select('#myTable');
 
         // populate thead
         thead = d3.select('#count-thead');
