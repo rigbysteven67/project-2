@@ -1,341 +1,303 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <title>Fantasy Stats</title>
-        
-        <!-- D3 CDN -->
-        <script src="https://d3js.org/d3.v6.min.js"></script>
-        
-        <!-- Bootstrap CSS and JavaScript CDN -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>        
+  
+    <!DOCTYPE html>
+    <html lang="en">
+        <head>
+            <title>Fantasy Stats</title>
+            
+            <!-- D3 CDN -->
+            <script src="https://d3js.org/d3.v6.min.js"></script>
+            
+            <!-- Bootstrap CSS and JavaScript CDN -->
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+            <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>   
+            <link href='bootstrap.min.css' rel='stylesheet'/>
 
-        <!-- Custom JavaScript-->
-        <script src = "{{ url_for('static', filename='js/app.js') }}" defer></script>
-
-        <!-- Plotly -->
-        <script src="plotly-latest.min.js"></script>
-        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-
-    </head>
     
+            <!-- Custom CSS and JS -->
+            <!-- Defer the load of app.js so that the page 
+            can load first and then be processed by the script
+            (thanks Christina!)  -->
+            <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+            <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
 
-    <body>
+            <!-- Plotly -->
+            <script src="plotly-latest.min.js"></script>
+            <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
-        <!---
-        <div class='container'>
+            <!-- Tables -->
+            <script src= "https://code.jquery.com/jquery-3.5.1.js"></script>
+            <script src= "https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>     
+            <script src= "https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css"></script>  
+            
 
-            <div class='row'>
-                <div class='col-md-12'>
-                    <h1>Fantasy Stats</h1>
-                </div>
-            </div>
+            <!-- pagination -->
+            <script src="paginator.js"></script>
 
-            <div class="row">
-                <div class="col-md-12">
-                    <h5>Avg FPTS/G by Position</h5>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div id="avg_fpts_line"></div>
-                </div>
-            </div>
+            <!-- MDBootstrap Datatables  -->
+            <link href="css/addons/datatables.min.css" rel="stylesheet">
 
-            <div class="row">
-                <div class="col-md-12">
-                    <h5>Count of Position per Season</h5>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div id="pos_count_line"></div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-12">
-                    <div>
-                    <h5>Count of Position per Seasonn</h5>
-                    <table class='table table-striped table-hover' id='count-table'>
-                        <thead id='count-thead'>
-                        </thead>  
-                        <tbody id='count-tbody'>
-                        </tbody>
-                    </table>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-2">
-                    <div class="well">
-                    <h5>Season</h5>
-                    YOU WILL NEED TO ADD AN onchange EVENT TO THE DROP DOWN! 
-                    <select id="selDataset" onchange='optionChanged(this.value)' ></select>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-12">
-                    <h5>Scatter Plots, FPTS vs Pos</h5>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div id="qb_scatter"></div>
-                </div>
-                <div class="col-md-6">
-                    <div id="rb_scatter"></div>
-                </div>
-                <div class="col-md-6">
-                    <div id="wr_scatter"></div>
-                </div>
-                <div class="col-md-6">
-                    <div id="te_scatter"></div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-12">
-                    <div>
-                    <h5>Leaderboard</h5>
-                    <table class='table table-striped table-hover' id='stats-table'>
-                        <thead id='stats-thead'>
-                        </thead>  
-                        <tbody id='stats-tbody'>
-                        </tbody>
-                    </table>
-                    </div>
-                </div>
-            </div>
-                
-        </div>
-         -->
-
-
-
-
-         <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-12">
-                    <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-dark bg-dark">
-                         
-                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                            <span class="navbar-toggler-icon"></span>
-                        </button> <a class="navbar-brand" href="#">Brand</a>
-                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                            <ul class="navbar-nav">
-                                <li class="nav-item active">
-                                     <a class="nav-link" href="#">Link <span class="sr-only">(current)</span></a>
+            <!-- MDBootstrap Datatables  -->
+            <script type="text/javascript" src="js/addons/datatables.min.js"></script>
+            
+    
+        </head>
+        <style>
+            h1 {text-align: center;}
+            p {text-align: center;}
+            div {text-align: center;}
+        </style>
+        <body>
+    
+            <!--//carousel-->
+             <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="carousel slide" id="carousel-30070">
+                            <ol class="carousel-indicators">
+                                <li data-slide-to="0" data-target="#carousel-30070" class="active">
                                 </li>
-                                <li class="nav-item">
-                                     <a class="nav-link" href="#">Link</a>
+                                <li data-slide-to="1" data-target="#carousel-30070">
                                 </li>
-                                <li class="nav-item dropdown">
-                                     <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown">Dropdown link</a>
-                                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                         <a class="dropdown-item" href="#">Action</a> <a class="dropdown-item" href="#">Another action</a> <a class="dropdown-item" href="#">Something else here</a>
-                                        <div class="dropdown-divider">
-                                        </div> <a class="dropdown-item" href="#">Separated link</a>
+                                <li data-slide-to="2" data-target="#carousel-30070">
+                                </li>
+                            </ol>
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img class="d-block w-100" alt="Carousel Bootstrap First" src="https://www.thesportsgeek.com/wp-content/uploads/2020/07/fantasy-football-logo-helmet-825x400.jpg" />
+                                    <div class="carousel-caption">
+                                        <h4>
+                                            NFL Fantasy Ballers
+                                        </h4>
+                                        <p>
+                                            Comparing NFL Fantasy Data from 2002-2020 seasons
+                                        </p>
                                     </div>
-                                </li>
-                            </ul>
-                            <form class="form-inline">
-                                <input class="form-control mr-sm-2" type="text" /> 
-                                <button class="btn btn-primary my-2 my-sm-0" type="submit">
-                                    Search
-                                </button>
-                            </form>
-                            <ul class="navbar-nav ml-md-auto">
-                                <li class="nav-item active">
-                                     <a class="nav-link" href="#">Link <span class="sr-only">(current)</span></a>
-                                </li>
-                                <li class="nav-item dropdown">
-                                     <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown">Dropdown link</a>
-                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                                         <a class="dropdown-item" href="#">Action</a> <a class="dropdown-item" href="#">Another action</a> <a class="dropdown-item" href="#">Something else here</a>
-                                        <div class="dropdown-divider">
-                                        </div> <a class="dropdown-item" href="#">Separated link</a>
+                                </div>
+                                <div class="carousel-item">
+                                    <img class="d-block w-100" alt="Carousel Bootstrap Second" src="http://1.bp.blogspot.com/-pG69aHK2Cw0/T-ywWtmBskI/AAAAAAAAAZ0/_ei-uV2zjGQ/s1600/fbtcovers1.jpg" />
+                                    <div class="carousel-caption">
+                                        <h4>
+                                            
+                                        </h4>
+                                        <p>
+                                            
+                                        </p>
                                     </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </nav>
-                    <div class="jumbotron">
-                        <h2>
-                            NFL Fantasy Football Insider
-                        </h2>
-                        <p>
-                            Description if we want
-                        </p>
-                        <p>
-                            <a class="btn btn-primary btn-large" href="#">Learn more</a>
-                        </p>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
+                                </div>
+                                <div class="carousel-item">
+                                    <img class="d-block w-100" alt="Carousel Bootstrap Third" src="https://primetimesportstalk.com/wp-content/uploads/2020/12/SIX_327DAED1-EB68-4B35-8503-9B95C2D01B0D-0x0_c.jpeg" />
+                                    <div class="carousel-caption">
+                                        <h4>
+                                           
+                                        </h4>
+                                        <p>
+                                            
+                                        </p>
+                                    </div>
+                                </div>
+                            </div> <a class="carousel-control-prev" href="#carousel-30070" data-slide="prev"><span class="carousel-control-prev-icon"></span> <span class="sr-only">Previous</span></a> <a class="carousel-control-next" href="#carousel-30070" data-slide="next"><span class="carousel-control-next-icon"></span> <span class="sr-only">Next</span></a>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <form role="form" class="form-inline">
-                                <div class="form-group">
-                                     <label for="exampleInputEmail1">
-                                        Player #1
-                                    </label>
-                                    <input type="email" class="form-control" id="exampleInputEmail1" />
-                                </div>
-                            </form>
-                        </div>
-                        <div class="col-md-3">
-                            <form role="form" class="form-inline">
-                                <div class="form-group">                                     
-                                    <label for="exampleInputEmail1">
-                                        Player #2
-                                    </label>
-                                    <input type="email" class="form-control" id="exampleInputEmail1" />
-                                </div>
-                            </form>
-                        </div>
-                        <div class="col-md-2">
-                            <form role="form" class="form-inline">
-                                <div class="form-group">                                     
-                                    <label for="exampleInputEmail1">
-                                        Year
-                                    </label>
-                                    <input type="email" class="form-control" id="exampleInputEmail1" />
-                                </div>
-                            </form>
-                        </div>
-                        <div class="col-md-2">
-                            <form role="form" class="form-inline">
-                                <button type="submit" class="btn btn-primary">
-                                    Search
-                                </button>                                
-                            </form>
-                        </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <table class="table">
-                                        <thead>
-                                        </thead>
-                                        <tbody>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="col-md-6">
-                                    <table class="table">
-                                        <thead>
-                                        </thead>
-                                        <tbody>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h3>
-                                Line Graphs
-                            </h3>
-                            <p>
-                                Description if we want
-                            </p>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div id="avg_fpts_line"></div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div id="pos_count_line"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="well">
-                                <h5>Season</h5>
-                                <!---YOU WILL NEED TO ADD AN onchange EVENT TO THE DROP DOWN! --->
-                                <select id="selDataset" onchange='optionChanged(this.value)' ></select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h3>
-                               Scatter Plots
-                            </h3>
-                            <p>
-                                Description if we want
-                            </p>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div id="qb_scatter"></div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div id="rb_scatter"></div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div id="wr_scatter"></div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div id="te_scatter"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <h3>
-                                        Leaderboard
-                                    </h3>
-                                </div>
-                            </div>
-                            <table class='table table-striped table-hover' id='stats-table'>
-                                <thead id='stats-thead'>
-                                </thead>  
-                                <tbody id='stats-tbody'>
-                                </tbody>
-                            </table>
-                            <nav>
-                                <ul class="pagination">
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">Previous</a>
+                </div>
+            </div>
+    
+    
+    
+             <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-dark bg-dark">
+                             
+                          <!--  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                                <span class="navbar-toggler-icon"></span>
+                            </button> <a class="navbar-brand" href="#">Brand</a>
+                            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                                <ul class="navbar-nav">
+                                    <li class="nav-item active">
+                                         <a class="nav-link" href="#">Link <span class="sr-only">(current)</span></a>
                                     </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">1</a>
+                                    <li class="nav-item">
+                                         <a class="nav-link" href="#">Link</a>
                                     </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">2</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">3</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">4</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">5</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#">Next</a>
+                                    <li class="nav-item dropdown">
+                                         <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown">Dropdown link</a>
+                                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                             <a class="dropdown-item" href="#">Action</a> <a class="dropdown-item" href="#">Another action</a> <a class="dropdown-item" href="#">Something else here</a>
+                                            <div class="dropdown-divider">
+                                            </div> <a class="dropdown-item" href="#">Separated link</a>
+                                        </div>
                                     </li>
                                 </ul>
-                            </nav>
+                                <form class="form-inline">
+                                    <input class="form-control mr-sm-2" type="text" /> 
+                                    <button class="btn btn-primary my-2 my-sm-0" type="submit">
+                                        Search
+                                    </button>
+                                </form>
+                                <ul class="navbar-nav ml-md-auto">
+                                    <li class="nav-item active">
+                                         <a class="nav-link" href="#">Link <span class="sr-only">(current)</span></a>
+                                    </li>
+                                    <li class="nav-item dropdown">
+                                         <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown">Dropdown link</a>
+                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                                             <a class="dropdown-item" href="#">Action</a> <a class="dropdown-item" href="#">Another action</a> <a class="dropdown-item" href="#">Something else here</a>
+                                            <div class="dropdown-divider">
+                                            </div> <a class="dropdown-item" href="#">Separated link</a>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div> -->
+                        </nav>
+                        <div class="jumbotron">
+                            <h2>
+                                NFL Fantasy Football Analytics 
+                            </h2>
+                            <p>
+                                What's your Fantasy? The NFL Fantasy Ballers want to help you build out your next Fantasy team. Enjoy our interactive experience for analyzing NFL data to help you crush your Fantasy competition.
+                            </p>
+                          <!--  <p>
+                                <a class="btn btn-primary btn-large" href="#">Learn more</a>
+                            </p> -->
                         </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h3>
+                                    <br> Player Comparison 
+                                </h3>
+                                <p>
+                                   Side by side comparison.
+                                </p>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <input type="text" id="player1input" onkeyup="comparisonfunction()" placeholder="Player #1..">
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" id="player2input" onkeyup="comparisonfunction()" placeholder="Player #2..">
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" id="yearinput" onkeyup="comparisonfunction()" placeholder="Year..">
+                            </div>
+                            </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <table class="table">
+                                            <thead>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <table class="table">
+                                            <thead>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                            </div>
+                        </div>
+    
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h3>
+                                    <br> Position Comparison 
+                                </h3>
+                                <p>
+                                   Fantasy analytics based on position by season.
+                                </p>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div id="avg_fpts_line"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div id="pos_count_line"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Moving drop down further below
+                        <div class="row"> 
+                            <div class="col-md-12">
+                                <div class="well">
+                                    <h5>Season</h5>
+                                    <!-YOU WILL NEED TO ADD AN onchange EVENT TO THE DROP DOWN! ->
+                                    <select id="selDataset" onchange='optionChanged(this.value)' ></select>
+                                </div>
+                            </div>
+                        </div> -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h3>
+                                   Top 10 Fantasy Position Rankings 
+                                </h3>
+                                <p>
+                                    Fantasy top ten rankings for QBs, RBs, WRs, and TEs by season.
+                                </p>
+                                <div class="row"> 
+                                    <div class="col-md-12">
+                                        <div class="well">
+                                            <h5>Season</h5>
+                                            <!-YOU WILL NEED TO ADD AN onchange EVENT TO THE DROP DOWN! ->
+                                            <select id="selDataset" onchange='optionChanged(this.value)' ></select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div id="qb_scatter"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div id="rb_scatter"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div id="wr_scatter"></div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div id="te_scatter"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                       <div class="row">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h3>
+                                            Leaderboard
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class = 'containter' style = 'margin-top:35px'>
+                                    <h4> Select Number of Rows </h4>
+                                    <div class = 'form-group'>
+                                        <select name='state' id='maxRows' class='form-control' style='width:150px;'>
+                                            <option value='300'> Show All</option>
+                                            <option value='10'> 10</option>
+                                            <option value='30'> 30</option>
+                                            <option value='100'> 100</option>
+                                        </select>
+                                    </div>
+                                </div>
+                               <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names..">
+                                <table id="myTable" class="display" style="width:100%">
+                                    <thead id='stats-thead'>
+                                    </thead>  
+                                    <tbody id='stats-tbody'>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div> 
                     </div>
                 </div>
             </div>
-        </div>
-    </body>    
-</html>
+        </body>    
+    </html>
+    

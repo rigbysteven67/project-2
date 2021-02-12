@@ -89,12 +89,14 @@ function buildCharts(season) {
         var data2 = [trace1];
           
           var layout = {
-            // xaxis: {
-            //   range: [ 0, 10 ]
-            // },
-            // yaxis: {
-            //   range: [100, 400]
-            // },
+            xaxis: {
+              title: 'Player Ranking',
+              range: [ 0.75, 10.75 ]
+            },
+            yaxis: {
+              title: 'Total Points',
+              range: [80, 400]
+            },
             title:'FPTS for QB Rankings'
           };
           
@@ -125,15 +127,17 @@ function buildCharts(season) {
           
         var data2 = [trace1];
           
-          var layout = {
-            // xaxis: {
-            //   range: [ 0, 10 ]
-            // },
-            // yaxis: {
-            //   range: [100, 400]
-            // },
-            title:'FPTS for RB Rankings'
-          };
+        var layout = {
+          xaxis: {
+            title: 'Player Ranking',
+            range: [ 0.75, 10.75 ]
+          },
+          yaxis: {
+            title: 'Total Points',
+            range: [80, 400]
+          },
+          title:'FPTS for RB Rankings'
+        };
           
           Plotly.newPlot('rb_scatter', data2, layout);
 
@@ -163,14 +167,16 @@ function buildCharts(season) {
         var data2 = [trace1];
           
         var layout = {
-            // xaxis: {
-            //   range: [ 0, 10 ]
-            // },
-            // yaxis: {
-            //   range: [100, 400]
-            // },
-            title:'FPTS for WR Rankings'
-          };
+          xaxis: {
+            title: 'Player Ranking',
+            range: [ 0.75, 10.75 ]
+          },
+          yaxis: {
+            title: 'Total Points',
+            range: [80, 400]
+          },
+          title:'FPTS for WR Rankings'
+        };
           
           Plotly.newPlot('wr_scatter', data2, layout);
 
@@ -200,14 +206,16 @@ function buildCharts(season) {
         var data2 = [trace1];
           
         var layout = {
-            // xaxis: {
-            //   range: [ 0, 10 ]
-            // },
-            // yaxis: {
-            //   range: [100, 400]
-            // },
-            title:'FPTS for TE Rankings'
-          };
+          xaxis: {
+            title: 'Player Ranking',
+            range: [ 0.75, 10.75 ]
+          },
+          yaxis: {
+            title: 'Total Points',
+            range: [80, 400]
+          },
+          title:'FPTS for TE Rankings'
+        };
           
           Plotly.newPlot('te_scatter', data2, layout);
 
@@ -253,6 +261,12 @@ function buildCharts(season) {
           };
 
           var layout = {
+            xaxis: {
+              title: 'YEARS'
+            },
+            yaxis: {
+              title: 'Avg Points'
+            },
             title:'Avg Fantasy Points per Game by Position'
           };
           
@@ -304,6 +318,12 @@ function buildCharts(season) {
           };
 
           var layout = {
+            xaxis: {
+              title: 'YEARS'
+            },
+            yaxis: {
+              title: '# of Players'
+            },
             title:'Number of Top 300 Fantasy Players by Position'
           };
           
@@ -353,3 +373,26 @@ function buildCharts(season) {
 function optionChanged(newSample) {
     buildCharts(newSample);
 };
+
+
+
+
+
+function myFunction() {
+  var input, filter, table, tr, td, i;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[2];
+    if (td) {
+      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+}
+
