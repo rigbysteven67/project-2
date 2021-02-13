@@ -38,22 +38,23 @@ function buildCharts(season) {
     // build leaderboard table
 
     d3.json('/api/leaderboard').then(data => {
-      var Tablehead = document.getElementById("stats-thead");
-        Tablehead.innerHTML = "";
+      //var Tablehead = document.getElementById("stats-thead");
+      //  Tablehead.innerHTML = "";
       var Tablebody = document.getElementById("stats-tbody");
         Tablebody.innerHTML = "";
         
         //  apply filter for season value
-        data = data.filter(d => d['season'] == season).slice(0,30);
+        data = data.filter(d => d['season'] == season);
 
         // populate thead
-        
+        /* THIS IS HANDLED IN INDEX.HTML
         thead = d3.select('#stats-thead');
 
         Object.keys(data[0]).forEach(key => {
             var th = thead.append('th');
             th.text(key);
         });
+        */
 
         data.forEach(stats => {
             
@@ -66,6 +67,15 @@ function buildCharts(season) {
                 td.text(value);
             });
         });
+
+
+        /******* Activate the MDBootstrap thing */
+        $('#myTable').DataTable();
+        $('.dataTables_length').addClass('bs-select');
+        
+
+
+        
     });
 
     /**********************************/
@@ -375,32 +385,44 @@ function buildCharts(season) {
 
 
 function optionChanged(newSample) {
-    buildCharts(newSample);
+    buildCharts(newSample);   
+    
+    $('#myTable').DataTable();
+        $('.dataTables_length').addClass('bs-select');
 };
 
 
 
 
 
-function myFunction() {
-  var input, filter, table, tr, td, i;
-  input = document.getElementById("myInput");
-  filter = input.value.toUpperCase();
-  table = document.getElementById("myTable");
-  tr = table.getElementsByTagName("tr");
-  for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[2];
-    if (td) {
-      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-      } else {
-        tr[i].style.display = "none";
-      }
-    }
-  }
-}
+// function myFunction() {
+//   var input, filter, table, tr, td, i;
+//   input = document.getElementById("myInput");
+//   filter = input.value.toUpperCase();
+//   table = document.getElementById("myTable");
+//   tr = table.getElementsByTagName("tr");
+//   for (i = 0; i < tr.length; i++) {.append
+//     td = tr[i].getElementsByTagName("td")[2];
+//     if (td) {
+//       if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+//         tr[i].style.display = "";
+//       } else {
+//         tr[i].style.display = "none";
+//       }
+//     }
+//   }
+// }
 
-$(document).ready(function () {
-  $('#myTable').DataTable();
-  $('.dataTables_length').addClass('bs-select');
-  });
+// $(document).ready(function () {
+
+//   // sleep for a few seconds before running the jQuery stuff
+//   setTimeout(() => {  
+
+//     $('#myTable').DataTable();
+//     $('.dataTables_length').addClass('bs-select');
+
+//     console.log('end wait');
+//    }, 5000);
+//    // refine this to have the app check every ~.5 seconds
+
+// });

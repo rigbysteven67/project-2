@@ -1,22 +1,27 @@
 html{
   height: 100%;
-};
+}
 ​
 body{
   padding: 0;
   margin: 0;
-  background-color: rgb(81, 83, 81);
-};
+  background-color: rgb(191, 204, 191);
+}
+
+#selDataset {
+    opacity: 0.5;
+}
 ​
 .carousel-item img {
   max-height: 600px;
   height: 600px;
   width: auto;
   object-fit: cover;
-};
+}
 ​
-
-
+h2 {
+  color: green
+}
 
 .footer{
   background-color: darkgray;
@@ -24,3 +29,6 @@ body{
   margin-top: 32px;
 }
 
+h1 {text-align: center;}
+p {text-align: center;}
+div {text-align: center;}
